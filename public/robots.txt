@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://densho.tadeku.net/sitemap-index.xml

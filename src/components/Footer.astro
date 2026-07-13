@@ -1,0 +1,24 @@
+---
+import { site, affiliate } from '@/config/site';
+import { path } from '@/lib/paths';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <nav aria-label="フッターナビゲーション">
+      <ul class="site-footer__nav">
+        <li><a href={path('/about/')}>About</a></li>
+        <li><a href={path('/privacy/')}>プライバシーポリシー</a></li>
+        <li><a href={path('/privacy/#affiliate')}>アフィリエイト表記</a></li>
+        <li><a href={path('/contact/')}>お問い合わせ</a></li>
+        <li><a href={path('/sitemap/')}>サイトマップ</a></li>
+      </ul>
+    </nav>
+    <p>
+      © {year} {site.name} — {site.tagline}
+    </p>
+    <p class="affiliate-notice">{affiliate.disclosure}</p>
+  </div>
+</footer>

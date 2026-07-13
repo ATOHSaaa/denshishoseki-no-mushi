@@ -1,0 +1,41 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { getPublishedPosts, getPostsByCategory } from '@/lib/posts';
+import { categories, site } from '@/config/site';
+import type { CategoryId } from '@/config/site';
+import { path } from '@/lib/paths';
+
+export function getStaticPaths() {
+  const ids = Object.keys(categories) as CategoryId[];
+  return ids.map((id) => ({ params: { id } }));
+}
+
+const { id } = Astro.params as { id: CategoryId };
+const cat = categories[id];
+const allPosts = await getPublishedPosts();
+const posts = getPostsByCategory(allPosts, id);
+---
+
+<BaseLayout
+  title={`${cat.name} | ${site.name}`}
+  description={`${cat.description}に関する記事一覧。`}
+  pathname={`/category/${id}/`}
+>
+  <h1 class="page-title">#{cat.shortName}</h1>
+  <p class="page-desc">{cat.description}</p>
+  {
+    posts.length === 0 ? (
+      <p>このカテゴリの記事を準備中です。</p>
+    ) : (
+      <div class="post-list">
+        {posts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    )
+  }
+  <p class="post-list-footer">
+    <a class="text-link-arrow" href={path('/posts/')}>すべての記事を見る →</a>
+  </p>
+</BaseLayout>

@@ -1,0 +1,56 @@
+---
+import { site, sidebarProfile, relatedSites } from '@/config/site';
+import { path } from '@/lib/paths';
+---
+
+<aside class="home-sidebar" aria-label="サイドバー">
+  <div class="sidebar-box">
+    <div class="sidebar-box__brand">
+      <div class="sidebar-box__mark-wrap">
+        <img
+          class="sidebar-box__mark"
+          src={path('/images/header-silverfish-mark.png')}
+          alt=""
+          width="48"
+          height="48"
+          loading="lazy"
+          decoding="async"
+          aria-hidden="true"
+        />
+      </div>
+      <h2 class="sidebar-box__title sidebar-box__title--brand">{site.name}</h2>
+    </div>
+    <p class="sidebar-box__text">
+      {sidebarProfile.beforeOperator}
+      <a
+        href={sidebarProfile.operator.href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {sidebarProfile.operator.name}
+      </a>
+      {sidebarProfile.afterOperator}
+    </p>
+  </div>
+
+  <div class="sidebar-box">
+    <h2 class="sidebar-box__title">Links</h2>
+    <ul class="sidebar-box__list">
+      {
+        relatedSites.map((item) => (
+          <li class="sidebar-box__item">
+            <a
+              class="sidebar-box__link"
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="sidebar-box__link-name">{item.name}</span>
+              <span class="sidebar-box__link-desc">{item.description}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</aside>

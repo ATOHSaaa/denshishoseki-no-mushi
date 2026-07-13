@@ -1,0 +1,35 @@
+---
+import { site, categories } from '@/config/site';
+import type { CategoryId } from '@/config/site';
+import { path } from '@/lib/paths';
+
+const categoryIds = Object.keys(categories) as CategoryId[];
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href={path('/')} class="site-brand" aria-label={`${site.name} トップ`}>
+      <img
+        class="site-brand__mark"
+        src={path('/images/header-silverfish-mark.png')}
+        alt=""
+        width="44"
+        height="44"
+        loading="lazy"
+        decoding="async"
+        aria-hidden="true"
+      />
+      <span class="site-brand__text">{site.name}</span>
+    </a>
+    <nav class="site-nav" aria-label="メインナビゲーション">
+      {
+        categoryIds.map((id) => (
+          <a class="site-nav-control" href={path(`/category/${id}/`)}>
+            {categories[id].shortName}
+          </a>
+        ))
+      }
+      <a class="site-nav-control" href={path('/posts/')}>すべて</a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,154 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AmazonProductCards from '@/components/AmazonProductCards.astro';
+import HomeSidebar from '@/components/home/HomeSidebar.astro';
+import PostDate from '@/components/PostDate.astro';
+import StructuredData from '@/components/StructuredData.astro';
+import { formatDate, formatDateISO, type Post } from '@/lib/posts';
+import type { CreatorsProduct } from '@/lib/amazon';
+import type { ProductEntry } from '@/lib/product-entries';
+import { affiliate, categories } from '@/config/site';
+import type { CategoryId } from '@/config/site';
+
+interface ProductGroup {
+  title: string;
+  entries: ProductEntry[];
+  amazonProducts: CreatorsProduct[];
+}
+
+interface Props {
+  post: Post;
+  featuredAmazonProducts?: CreatorsProduct[];
+  featuredProductEntry?: ProductEntry;
+  amazonProducts?: CreatorsProduct[];
+  productEntries?: ProductEntry[];
+  productGroups?: ProductGroup[];
+  introHtml?: string;
+  leadHtml?: string;
+}
+
+const {
+  post,
+  featuredAmazonProducts = [],
+  featuredProductEntry,
+  amazonProducts = [],
+  productEntries = [],
+  productGroups = [],
+  introHtml = '',
+  leadHtml = '',
+} = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  author,
+  category,
+  saleEndDate,
+  thumbnailImage,
+} = post.data;
+const pathname = `/posts/${post.id}/`;
+const cat = categories[category as CategoryId];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  pathname={pathname}
+  ogImage={thumbnailImage}
+  ogType="article"
+  publishedTime={formatDateISO(pubDate)}
+  modifiedTime={formatDateISO(updatedDate ?? pubDate)}
+  structuredData="Article"
+  layout="home"
+  breadcrumbs={[
+    { name: 'ホーム', path: '/' },
+    { name: '記事一覧', path: '/posts/' },
+    { name: title, path: pathname },
+  ]}
+>
+  <StructuredData
+    type="BreadcrumbList"
+    pathname={pathname}
+    breadcrumbs={[
+      { name: 'ホーム', path: '/' },
+      { name: '記事一覧', path: '/posts/' },
+      { name: title, path: pathname },
+    ]}
+  />
+
+  <div class="home-layout">
+    <div class="home-layout__main">
+      <article class="container--narrow" itemscope itemtype="https://schema.org/Article">
+        <header class="article-header">
+          <p class="article-header__meta">
+            <span class={`category-badge category-badge--${category}`}>
+              {cat.shortName}
+            </span>
+            {saleEndDate && saleEndDate.valueOf() > Date.now() && (
+              <span class="sale-badge sale-badge--sale">セール開催中</span>
+            )}
+            <PostDate date={pubDate} itemprop="datePublished" />
+            {updatedDate && updatedDate > pubDate && (
+              <>
+                {' '}
+                （更新:{' '}
+                <time datetime={updatedDate.toISOString()} itemprop="dateModified">
+                  {formatDate(updatedDate)}
+                </time>
+                ）
+              </>
+            )}
+            {' · '}
+            <span itemprop="author">{author}</span>
+          </p>
+          <h1 itemprop="headline">{title}</h1>
+          <p class="article-header__disclosure">{affiliate.articleDisclosure}</p>
+          <meta itemprop="description" content={description} />
+        </header>
+
+        {
+          introHtml && (
+            <div class="article-intro prose" set:html={introHtml} />
+          )
+        }
+
+        {
+          featuredProductEntry && featuredAmazonProducts.length > 0 && (
+            <AmazonProductCards
+              products={featuredAmazonProducts}
+              entries={[featuredProductEntry]}
+              showHeading={false}
+            />
+          )
+        }
+
+        {
+          leadHtml && (
+            <div class="article-lead prose" set:html={leadHtml} />
+          )
+        }
+
+        <AmazonProductCards
+          products={amazonProducts}
+          entries={productEntries}
+          title="対象作品"
+          showHeading={false}
+        />
+
+        {
+          productGroups.map((group) => (
+            <AmazonProductCards
+              products={group.amazonProducts}
+              entries={group.entries}
+              title={group.title}
+              variant="covers"
+            />
+          ))
+        }
+      </article>
+    </div>
+
+    <HomeSidebar />
+  </div>
+</BaseLayout>

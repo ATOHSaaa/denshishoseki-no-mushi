@@ -1,0 +1,80 @@
+---
+import SaleBadge from '@/components/SaleBadge.astro';
+import type { CreatorsProduct } from '@/lib/amazon';
+import { resolveProductCardPrices } from '@/lib/product-card-price';
+
+interface Props {
+  product: CreatorsProduct;
+  label?: string;
+  note?: string;
+  variant?: 'default' | 'cover';
+}
+
+const { product, label, note, variant = 'default' } = Astro.props;
+const prices = resolveProductCardPrices(product);
+const isCover = variant === 'cover';
+---
+
+<article class:list={['amazon-product-card', isCover && 'amazon-product-card--cover']}>
+  <a
+    class="amazon-product-card__link"
+    href={product.detailPageUrl}
+    rel="nofollow sponsored noopener noreferrer"
+    target="_blank"
+  >
+    {product.imageUrl && (
+      <div class="amazon-product-card__image-wrap">
+        <img
+          src={product.imageUrl}
+          alt=""
+          width="160"
+          height="160"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    )}
+    <div class="amazon-product-card__body">
+      {
+        !isCover && (
+          <div class="amazon-product-card__badges">
+            {product.savings && <SaleBadge label={product.savings} variant="sale" />}
+          </div>
+        )
+      }
+      {label && <p class="amazon-product-card__label">{label}</p>}
+      {
+        !isCover && (
+          <>
+            <h3 class="amazon-product-card__title">{product.title}</h3>
+            {
+              prices.showCompare && prices.salePrice && prices.referencePrice ? (
+                <div class="amazon-product-card__prices">
+                  <span class="amazon-product-card__price-ref">{prices.referencePrice}</span>
+                  <span class="amazon-product-card__price-sale">{prices.salePrice}</span>
+                </div>
+              ) : prices.salePrice ? (
+                <p class="amazon-product-card__price">{prices.salePrice}</p>
+              ) : (
+                <p class="amazon-product-card__price amazon-product-card__price--muted">
+                  価格は商品ページでご確認ください
+                </p>
+              )
+            }
+            {note && <p class="amazon-product-card__note">{note}</p>}
+            <p class="amazon-product-card__cta">Amazon.co.jpで見る</p>
+          </>
+        )
+      }
+      {
+        isCover && (
+          prices.salePrice ? (
+            <p class="amazon-product-card__price">{prices.salePrice}</p>
+          ) : (
+            <p class="amazon-product-card__price amazon-product-card__price--muted">99円</p>
+          )
+        )
+      }
+    </div>
+  </a>
+</article>

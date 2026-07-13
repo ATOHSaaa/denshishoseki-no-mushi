@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+import { fetchProductsByAsins } from '@/lib/creators-api';
+import { resolveProducts } from '@/lib/product-entries';
+import { splitArticleBody, splitArticleLead } from '@/lib/article-body';
+import { renderMarkdown } from '@/lib/render-markdown';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: Awaited<ReturnType<typeof getCollection<'posts'>>>[number];
+}
+
+const { post } = Astro.props;
+
+const featuredEntry = post.data.featuredProduct;
+const productEntries = post.data.products ?? [];
+const productGroupEntries = post.data.productGroups ?? [];
+const thumbnailAsin = post.data.thumbnailAsin;
+const asins = [
+  ...(thumbnailAsin ? [thumbnailAsin] : []),
+  ...(featuredEntry ? [featuredEntry.asin] : []),
+  ...productEntries.map((p) => p.asin),
+  ...productGroupEntries.flatMap((group) => group.products.map((p) => p.asin)),
+];
+const apiProducts =
+  asins.length > 0 ? await fetchProductsByAsins(asins) : [];
+const featuredAmazonProducts = featuredEntry
+  ? resolveProducts([featuredEntry], apiProducts)
+  : [];
+const amazonProducts = resolveProducts(productEntries, apiProducts);
+const productGroups = productGroupEntries.map((group) => ({
+  title: group.title,
+  entries: group.products,
+  amazonProducts: resolveProducts(group.products, apiProducts),
+}));
+
+const { lead } = splitArticleBody(post.body ?? '');
+const { intro, afterAffiliate } = splitArticleLead(lead);
+const frontmatter = post.data as Record<string, unknown>;
+const [introRendered, leadRendered] = await Promise.all([
+  renderMarkdown(intro, frontmatter),
+  renderMarkdown(afterAffiliate, frontmatter),
+]);
+---
+
+<PostLayout
+  post={post}
+  featuredAmazonProducts={featuredAmazonProducts}
+  featuredProductEntry={featuredEntry}
+  amazonProducts={amazonProducts}
+  productEntries={productEntries}
+  productGroups={productGroups}
+  introHtml={introRendered.html}
+  leadHtml={leadRendered.html}
+/>

@@ -1,0 +1,58 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import HomeSection from '@/components/home/HomeSection.astro';
+import PostCard from '@/components/PostCard.astro';
+import HomeSidebar from '@/components/home/HomeSidebar.astro';
+import { getPublishedPosts } from '@/lib/posts';
+import { site } from '@/config/site';
+import { path } from '@/lib/paths';
+
+const posts = await getPublishedPosts();
+const latestPosts = posts.slice(0, 6);
+---
+
+<BaseLayout
+  title={`${site.name} | ${site.homeTitle}`}
+  description={site.description}
+  pathname="/"
+  structuredData="WebSite"
+  layout="home"
+>
+  <div class="home-layout">
+    <div class="home-layout__main">
+      {
+        latestPosts.length > 0 && (
+          <HomeSection
+            title="Latest"
+            subtitle="新着記事"
+            moreHref={path('/posts/')}
+            id="home-latest"
+          >
+            <div class="post-list">
+              {latestPosts.map((post) => (
+                <PostCard post={post} />
+              ))}
+            </div>
+          </HomeSection>
+        )
+      }
+
+      <HomeSection
+        title="About"
+        subtitle="このサイトについて"
+        moreHref={path('/about/')}
+        moreLabel="詳しく"
+        id="home-about"
+      >
+        <p>
+          <strong>{site.name}</strong>は、Kindleや電子書籍リーダー、読書アプリを中心に、デジタル読書の楽しみ方とお得な買い方を発信するメディアです。
+        </p>
+        <p>
+          端末レビュー、セール情報、読書術など、電子書籍に関する情報をわかりやすくお届けします。
+        </p>
+      </HomeSection>
+    </div>
+
+    <HomeSidebar />
+  </div>
+</BaseLayout>

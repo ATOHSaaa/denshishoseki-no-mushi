@@ -1,0 +1,20 @@
+---
+import { upcomingTopics, categories } from '@/config/site';
+---
+
+<ul class="topic-list">
+  {
+    upcomingTopics.map((topic) => (
+      <li class="topic-card">
+        <div class="topic-card__badge">
+          <span class={`category-badge category-badge--${topic.category}`}>
+            {categories[topic.category].shortName}
+          </span>
+        </div>
+        <h3 class="topic-card__title">{topic.title}</h3>
+        <p class="topic-card__desc">{topic.description}</p>
+        <span class="topic-card__status">COMING SOON</span>
+      </li>
+    ))
+  }
+</ul>

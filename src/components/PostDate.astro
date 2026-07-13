@@ -1,0 +1,18 @@
+---
+import { formatDate, isPublishedToday } from '@/lib/posts';
+
+interface Props {
+  date: Date;
+  itemprop?: string;
+}
+
+const { date, itemprop } = Astro.props;
+const showNew = isPublishedToday(date);
+---
+
+<span class="post-date">
+  <time datetime={date.toISOString()} itemprop={itemprop}>
+    {formatDate(date)}
+  </time>
+  {showNew && <span class="new-badge" aria-label="新着">New</span>}
+</span>

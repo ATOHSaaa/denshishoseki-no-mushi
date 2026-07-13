@@ -1,0 +1,34 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/config/site';
+---
+
+<BaseLayout
+  title="About"
+  description={`${site.name}について。Kindle・電子書籍リーダー・読書アプリのレビューとお得情報を発信しています。`}
+  pathname="/about/"
+>
+  <h1 class="page-title">About</h1>
+  <div class="container--narrow">
+    <p>
+      <strong>{site.name}</strong>は、{site.tagline}をテーマにしたメディアです。
+    </p>
+    <p>
+      Kindle端末、電子書籍リーダー、読書アプリのレビューや比較、セール・キャンペーン情報、デジタル読書のコツなどを解説しています。
+    </p>
+    <h2>編集方針</h2>
+    <ul>
+      <li>記事は執筆時点の調査に基づき、更新日を明示します</li>
+      <li>価格・セール期間・仕様は変更されるため、購入前は必ず公式サイトでご確認ください</li>
+      <li>当サイトのリンクからAmazon.co.jpで購入された場合、紹介料が発生することがあります</li>
+    </ul>
+    <h2>取り上げるテーマ</h2>
+    <ul>
+      <li>Kindle・電子書籍リーダーのレビュー・比較</li>
+      <li>Kindleセール、ポイント還元などのお得情報</li>
+      <li>読書アプリ（Kindle、BookWalker、楽天Kobo など）の活用法</li>
+      <li>ハイライト・メモ・読書習慣などデジタル読書のコツ</li>
+      <li>電子版マンガ・コミックの読み方・おすすめ</li>
+    </ul>
+  </div>
+</BaseLayout>

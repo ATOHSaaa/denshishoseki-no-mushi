@@ -1,0 +1,34 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  moreHref?: string;
+  moreLabel?: string;
+  id?: string;
+}
+
+const {
+  title,
+  subtitle,
+  moreHref,
+  moreLabel = 'MORE',
+  id,
+} = Astro.props;
+---
+
+<section class="home-section" aria-labelledby={id}>
+  <div class="home-section__head">
+    <div class="home-section__titles">
+      <h2 class="home-section__title" id={id}>{title}</h2>
+      {subtitle && <p class="home-section__subtitle">{subtitle}</p>}
+    </div>
+    {moreHref && (
+      <a class="home-section__more" href={moreHref}>
+        {moreLabel}
+      </a>
+    )}
+  </div>
+  <div class="home-section__body">
+    <slot />
+  </div>
+</section>

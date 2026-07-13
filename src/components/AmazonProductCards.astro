@@ -1,0 +1,51 @@
+---
+import AmazonProductCard from '@/components/AmazonProductCard.astro';
+import type { CreatorsProduct } from '@/lib/amazon';
+import type { ProductEntry } from '@/lib/product-entries';
+
+interface Props {
+  products: CreatorsProduct[];
+  entries: ProductEntry[];
+  title?: string;
+  showHeading?: boolean;
+  variant?: 'default' | 'covers';
+}
+
+const {
+  products,
+  entries,
+  title = '対象商品（Amazon.co.jp）',
+  showHeading = true,
+  variant = 'default',
+} = Astro.props;
+
+const entryByAsin = new Map(entries.map((e) => [e.asin, e]));
+const hasProducts = entries.length > 0;
+const isCovers = variant === 'covers';
+---
+
+{
+  hasProducts && (
+    <section
+      class:list={['amazon-product-cards', isCovers && 'amazon-product-cards--covers']}
+      aria-label={title}
+    >
+      {showHeading && <h2 class="amazon-product-cards__heading">{title}</h2>}
+      <ul class="amazon-product-cards__list">
+        {products.map((product) => {
+          const entry = entryByAsin.get(product.asin);
+          return (
+            <li>
+              <AmazonProductCard
+                product={product}
+                label={entry?.label}
+                note={entry?.note}
+                variant={isCovers ? 'cover' : 'default'}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  )
+}

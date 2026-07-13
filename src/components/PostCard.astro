@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { categories } from '@/config/site';
+import type { CategoryId } from '@/config/site';
+import { amazonProductImageUrl } from '@/lib/product-entries';
+import { path } from '@/lib/paths';
+import PostDate from '@/components/PostDate.astro';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, category, thumbnailImage, thumbnailAsin, products } =
+  post.data;
+const href = path(`/posts/${post.id}/`);
+const cat = categories[category as CategoryId];
+const asin = thumbnailAsin ?? products?.[0]?.asin;
+const imageUrl =
+  thumbnailImage ?? (asin ? amazonProductImageUrl(asin, 300) : null);
+---
+
+<a href={href} class="post-card">
+  <div class="post-card__thumb">
+    {
+      imageUrl ? (
+        <img src={imageUrl} alt="" width="208" height="130" loading="lazy" />
+      ) : (
+        <div class={`post-card__thumb-ph post-card__thumb-ph--${category}`}>
+          <span>{cat.shortName}</span>
+        </div>
+      )
+    }
+  </div>
+  <div class="post-card__body">
+    <p class="post-card__meta">
+      <span class={`category-badge category-badge--${category}`}>
+        {cat.shortName}
+      </span>
+      <PostDate date={pubDate} />
+    </p>
+    <h2 class="post-card__title">{title}</h2>
+    {description && <p class="post-card__desc">{description}</p>}
+  </div>
+</a>

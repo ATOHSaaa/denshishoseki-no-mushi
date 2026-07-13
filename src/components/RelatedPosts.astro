@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostDate from '@/components/PostDate.astro';
+import { path } from '@/lib/paths';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+  posts.length > 0 && (
+    <section class="related-posts" aria-labelledby="related-heading">
+      <h2 id="related-heading">関連記事</h2>
+      <ul>
+        {posts.map((post) => (
+          <li>
+            <a href={path(`/posts/${post.id}/`)}>{post.data.title}</a>
+            <span> — </span>
+            <PostDate date={post.data.pubDate} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

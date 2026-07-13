@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { path } from '@/lib/paths';
+---
+
+<BaseLayout
+  title="ページが見つかりません"
+  description="お探しのページは見つかりませんでした。"
+  pathname="/404/"
+  noindex={true}
+>
+  <h1 class="page-title">404 — ページが見つかりません</h1>
+  <p>
+    <a href={path('/')}>トップページ</a>からお探しください。
+  </p>
+</BaseLayout>
