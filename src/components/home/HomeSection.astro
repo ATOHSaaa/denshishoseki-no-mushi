@@ -22,13 +22,17 @@ const {
       <h2 class="home-section__title" id={id}>{title}</h2>
       {subtitle && <p class="home-section__subtitle">{subtitle}</p>}
     </div>
-    {moreHref && (
-      <a class="home-section__more" href={moreHref}>
-        {moreLabel}
-      </a>
-    )}
   </div>
   <div class="home-section__body">
     <slot />
   </div>
+  {
+    moreHref && (
+      <p class="home-section__footer">
+        <a class="home-section__more" href={moreHref}>
+          {moreLabel}
+        </a>
+      </p>
+    )
+  }
 </section>

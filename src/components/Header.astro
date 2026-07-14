@@ -1,9 +1,6 @@
 ---
-import { site, categories } from '@/config/site';
-import type { CategoryId } from '@/config/site';
+import { site } from '@/config/site';
 import { path } from '@/lib/paths';
-
-const categoryIds = Object.keys(categories) as CategoryId[];
 ---
 
 <header class="site-header">
@@ -22,14 +19,7 @@ const categoryIds = Object.keys(categories) as CategoryId[];
       <span class="site-brand__text">{site.name}</span>
     </a>
     <nav class="site-nav" aria-label="メインナビゲーション">
-      {
-        categoryIds.map((id) => (
-          <a class="site-nav-control" href={path(`/category/${id}/`)}>
-            {categories[id].shortName}
-          </a>
-        ))
-      }
-      <a class="site-nav-control" href={path('/posts/')}>すべて</a>
+      <a class="site-nav-control" href={path('/about/')}>このサイトについて</a>
     </nav>
   </div>
 </header>
