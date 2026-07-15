@@ -3,12 +3,35 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import HomeSection from '@/components/home/HomeSection.astro';
 import PostCard from '@/components/PostCard.astro';
 import HomeSidebar from '@/components/home/HomeSidebar.astro';
-import { getPublishedPosts } from '@/lib/posts';
+import AmazonProductCards from '@/components/AmazonProductCards.astro';
+import { getPublishedPosts, getActiveDailyDealPost } from '@/lib/posts';
+import { fetchProductsByAsins } from '@/lib/creators-api';
+import { resolveProducts, type ProductEntry } from '@/lib/product-entries';
 import { site } from '@/config/site';
 import { path } from '@/lib/paths';
 
 const posts = await getPublishedPosts();
 const latestPosts = posts.slice(0, 6);
+const dailyDealPost = getActiveDailyDealPost(posts);
+
+const dailyDealEntries: ProductEntry[] = dailyDealPost
+  ? [
+      ...(dailyDealPost.data.featuredProduct
+        ? [dailyDealPost.data.featuredProduct]
+        : []),
+      ...(dailyDealPost.data.products ?? []),
+    ].map((entry) => ({
+      asin: entry.asin,
+      price: entry.price,
+      imageUrl: entry.imageUrl,
+    }))
+  : [];
+
+const dailyDealApiProducts =
+  dailyDealEntries.length > 0
+    ? await fetchProductsByAsins(dailyDealEntries.map((e) => e.asin))
+    : [];
+const dailyDealProducts = resolveProducts(dailyDealEntries, dailyDealApiProducts);
 ---
 
 <BaseLayout
@@ -33,6 +56,24 @@ const latestPosts = posts.slice(0, 6);
                 <PostCard post={post} />
               ))}
             </div>
+          </HomeSection>
+        )
+      }
+
+      {
+        dailyDealPost && dailyDealProducts.length > 0 && (
+          <HomeSection
+            title="Daily Deals"
+            subtitle="本日の日替わりセール"
+            id="home-daily-deals"
+          >
+            <AmazonProductCards
+              products={dailyDealProducts}
+              entries={dailyDealEntries}
+              title="本日の日替わりセール対象"
+              showHeading={false}
+              variant="covers"
+            />
           </HomeSection>
         )
       }

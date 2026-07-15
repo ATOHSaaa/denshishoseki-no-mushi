@@ -1031,16 +1031,72 @@ main {
   margin-top: var(--space-lg);
 }
 
-.amazon-product-cards--covers .amazon-product-cards__list {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: var(--space-sm);
-}
-
 .amazon-product-cards__list {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.amazon-product-cards--covers .amazon-product-cards__list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-sm);
+  align-items: stretch;
+}
+
+.amazon-product-cards--covers .amazon-product-cards__list > li {
+  display: flex;
+  min-height: 0;
+}
+
+.amazon-product-card--cover {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  min-height: 100%;
+}
+
+.amazon-product-card--cover .amazon-product-card__link {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  gap: 0.45rem;
+  padding: 0.5rem;
+}
+
+.amazon-product-card--cover .amazon-product-card__image-wrap {
+  flex: 1 1 auto;
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  min-height: 0;
+  padding: 0.25rem;
+}
+
+.amazon-product-card--cover .amazon-product-card__image-wrap img {
+  width: 100%;
+  max-height: none;
+  height: 100%;
+  object-fit: contain;
+}
+
+.amazon-product-card--cover .amazon-product-card__body {
+  margin-top: auto;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.amazon-product-card--cover .amazon-product-card__label {
+  font-size: 0.8125rem;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.amazon-product-card--cover .amazon-product-card__price {
+  font-size: 0.875rem;
+  margin: 0;
 }
 
 .amazon-product-card__link {
@@ -1138,42 +1194,6 @@ main {
   font-size: 0.8125rem;
   margin: 0;
   font-weight: 700;
-}
-
-.amazon-product-card--cover .amazon-product-card__link {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.45rem;
-  height: 100%;
-  padding: 0.5rem;
-}
-
-.amazon-product-card--cover .amazon-product-card__image-wrap {
-  aspect-ratio: 3 / 4;
-  padding: 0.25rem;
-}
-
-.amazon-product-card--cover .amazon-product-card__image-wrap img {
-  width: 100%;
-  max-height: none;
-  height: 100%;
-  object-fit: contain;
-}
-
-.amazon-product-card--cover .amazon-product-card__body {
-  text-align: center;
-}
-
-.amazon-product-card--cover .amazon-product-card__label {
-  font-size: 0.8125rem;
-  margin: 0;
-  color: var(--color-text);
-}
-
-.amazon-product-card--cover .amazon-product-card__price {
-  font-size: 0.875rem;
-  margin: 0;
 }
 
 @media (max-width: 600px) {

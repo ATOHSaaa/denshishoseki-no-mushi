@@ -111,3 +111,18 @@ export function getRelatedPosts(
     .slice(0, limit)
     .map((s) => s.post);
 }
+
+/** 開催中の最新 Kindle 日替わりセール記事（なければ undefined） */
+export function getActiveDailyDealPost(
+  posts: Post[],
+  now: Date = new Date(),
+): Post | undefined {
+  const today = toTokyoDateKey(now);
+  return posts.find((post) => {
+    if (post.data.saleEvent !== 'kindle-daily-deal') return false;
+    const end = post.data.saleEndDate;
+    if (!end) return true;
+    // 日付のみの saleEndDate は当日中（Asia/Tokyo）有効とみなす
+    return toTokyoDateKey(end) >= today;
+  });
+}

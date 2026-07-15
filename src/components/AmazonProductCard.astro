@@ -26,7 +26,7 @@ const isCover = variant === 'cover';
       <div class="amazon-product-card__image-wrap">
         <img
           src={product.imageUrl}
-          alt=""
+          alt={isCover ? product.title : ''}
           width="160"
           height="160"
           loading="lazy"
