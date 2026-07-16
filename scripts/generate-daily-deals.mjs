@@ -105,26 +105,49 @@ function extractAsins(html) {
   return asins;
 }
 
+const FETCH_HEADERS = {
+  'User-Agent':
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Accept-Language': 'ja-JP,ja;q=0.9',
+  Accept: 'text/html,application/xhtml+xml',
+};
+const MAX_PAGES = 5;
+
+async function fetchPageHtml(page) {
+  const url = page <= 1 ? DAILY_DEALS_URL : `${DAILY_DEALS_URL}&page=${page}`;
+  const res = await fetch(url, { headers: FETCH_HEADERS });
+  if (!res.ok) {
+    console.warn(`[daily-deals] fetch status ${res.status} (page ${page})`);
+    return null;
+  }
+  return res.text();
+}
+
 async function fetchDailyDealAsins() {
   let lastCount = 0;
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    const res = await fetch(DAILY_DEALS_URL, {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept-Language': 'ja-JP,ja;q=0.9',
-        Accept: 'text/html,application/xhtml+xml',
-      },
-    });
-    if (!res.ok) {
-      console.warn(`[daily-deals] fetch status ${res.status} (attempt ${attempt})`);
-    } else {
-      const html = await res.text();
-      const asins = extractAsins(html);
-      lastCount = asins.length;
-      console.log(`[daily-deals] scraped ${asins.length} ASINs (attempt ${attempt})`);
-      if (asins.length >= MIN_ITEMS) return asins;
+    const seen = new Set();
+    const asins = [];
+    for (let page = 1; page <= MAX_PAGES; page++) {
+      const html = await fetchPageHtml(page);
+      if (!html) break;
+      const pageAsins = extractAsins(html);
+      let added = 0;
+      for (const asin of pageAsins) {
+        if (seen.has(asin)) continue;
+        seen.add(asin);
+        asins.push(asin);
+        added += 1;
+      }
+      console.log(
+        `[daily-deals] page ${page}: ${pageAsins.length} on page, +${added} new (total ${asins.length})`,
+      );
+      if (added === 0) break;
+      if (page < MAX_PAGES) await sleep(400);
     }
+    lastCount = asins.length;
+    console.log(`[daily-deals] scraped ${asins.length} ASINs (attempt ${attempt})`);
+    if (asins.length >= MIN_ITEMS) return asins;
     if (attempt < MAX_RETRIES) await sleep(5000 * attempt);
   }
   throw new Error(
