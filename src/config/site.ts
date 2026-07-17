@@ -9,7 +9,7 @@ export const site = {
   author: '電子書籍の虫編集部',
   locale: 'ja_JP',
   language: 'ja',
-  email: 'contact@example.com',
+  email: 'info@tadeku.net',
   social: {
     x: '',
   },
