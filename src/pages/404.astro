@@ -1,6 +1,10 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPublishedPosts } from '@/lib/posts';
 import { path } from '@/lib/paths';
+
+const posts = await getPublishedPosts();
+const suggestedPosts = posts.slice(0, 3);
 ---
 
 <BaseLayout
@@ -9,8 +13,57 @@ import { path } from '@/lib/paths';
   pathname="/404/"
   noindex={true}
 >
-  <h1 class="page-title">404 — ページが見つかりません</h1>
-  <p>
-    <a href={path('/')}>トップページ</a>からお探しください。
-  </p>
+  <div class="not-found">
+    <div class="not-found__hero">
+      <img
+        class="not-found__mark"
+        src={path('/images/header-silverfish-mark.png')}
+        alt=""
+        width="72"
+        height="72"
+        loading="eager"
+        decoding="async"
+        aria-hidden="true"
+      />
+      <p class="not-found__code" aria-hidden="true">404</p>
+      <h1 class="not-found__title">ページが見つかりません</h1>
+      <p class="not-found__lead">
+        お探しのページは、棚の奥で見つからなくなった本のようです。<br />
+        URLが間違っているか、ページが移動・削除された可能性があります。
+      </p>
+      <nav class="not-found__actions" aria-label="おすすめのリンク">
+        <a class="not-found__btn not-found__btn--primary" href={path('/')}>
+          トップページへ
+        </a>
+        <a class="not-found__btn" href={path('/posts/')}>記事一覧</a>
+        <a class="not-found__btn" href={path('/sitemap/')}>サイトマップ</a>
+      </nav>
+    </div>
+
+    {
+      suggestedPosts.length > 0 && (
+        <section class="not-found__suggestions" aria-labelledby="not-found-suggestions">
+          <h2 id="not-found-suggestions" class="not-found__suggestions-title">
+            こちらの記事はいかがですか
+          </h2>
+          <ul class="not-found__post-list">
+            {suggestedPosts.map((post) => (
+              <li>
+                <a class="not-found__post-link" href={path(`/posts/${post.id}/`)}>
+                  <span class="not-found__post-title">{post.data.title}</span>
+                  <span class="not-found__post-arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <p class="not-found__contact">
+      お困りの場合は
+      <a href={path('/contact/')}>お問い合わせ</a>
+      からご連絡ください。
+    </p>
+  </div>
 </BaseLayout>
