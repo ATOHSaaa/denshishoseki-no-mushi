@@ -25,6 +25,7 @@ interface Props {
   productGroups?: ProductGroup[];
   introHtml?: string;
   leadHtml?: string;
+  bodyHtml?: string;
 }
 
 const {
@@ -36,6 +37,7 @@ const {
   productGroups = [],
   introHtml = '',
   leadHtml = '',
+  bodyHtml = '',
 } = Astro.props;
 const {
   title,
@@ -145,6 +147,12 @@ const cat = categories[category as CategoryId];
               variant="covers"
             />
           ))
+        }
+
+        {
+          bodyHtml && (
+            <div class="article-body prose" set:html={bodyHtml} />
+          )
         }
       </article>
     </div>

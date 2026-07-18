@@ -42,12 +42,13 @@ const productGroups = productGroupEntries.map((group) => ({
   amazonProducts: resolveProducts(group.products, apiProducts),
 }));
 
-const { lead } = splitArticleBody(post.body ?? '');
+const { lead, body } = splitArticleBody(post.body ?? '');
 const { intro, afterAffiliate } = splitArticleLead(lead);
 const frontmatter = post.data as Record<string, unknown>;
-const [introRendered, leadRendered] = await Promise.all([
+const [introRendered, leadRendered, bodyRendered] = await Promise.all([
   renderMarkdown(intro, frontmatter),
   renderMarkdown(afterAffiliate, frontmatter),
+  renderMarkdown(body, frontmatter),
 ]);
 ---
 
@@ -60,4 +61,5 @@ const [introRendered, leadRendered] = await Promise.all([
   productGroups={productGroups}
   introHtml={introRendered.html}
   leadHtml={leadRendered.html}
+  bodyHtml={bodyRendered.html}
 />
