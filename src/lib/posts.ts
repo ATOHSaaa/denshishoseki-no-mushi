@@ -118,8 +118,16 @@ export function getActiveDailyDealPost(
   now: Date = new Date(),
 ): Post | undefined {
   const today = toTokyoDateKey(now);
-  return posts.find((post) => {
-    if (post.data.saleEvent !== 'kindle-daily-deal') return false;
+  const dailyDeals = posts.filter(
+    (post) => post.data.saleEvent === 'kindle-daily-deal',
+  );
+
+  const todaysPost = dailyDeals.find(
+    (post) => toTokyoDateKey(post.data.pubDate) === today,
+  );
+  if (todaysPost) return todaysPost;
+
+  return dailyDeals.find((post) => {
     const end = post.data.saleEndDate;
     if (!end) return true;
     // 日付のみの saleEndDate は当日中（Asia/Tokyo）有効とみなす

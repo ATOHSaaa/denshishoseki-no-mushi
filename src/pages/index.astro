@@ -4,7 +4,7 @@ import HomeSection from '@/components/home/HomeSection.astro';
 import PostCard from '@/components/PostCard.astro';
 import HomeSidebar from '@/components/home/HomeSidebar.astro';
 import AmazonProductCards from '@/components/AmazonProductCards.astro';
-import { getPublishedPosts, getActiveDailyDealPost } from '@/lib/posts';
+import { getPublishedPosts, getActiveDailyDealPost, formatDate } from '@/lib/posts';
 import { fetchProductsByAsins } from '@/lib/creators-api';
 import { resolveProducts, type ProductEntry } from '@/lib/product-entries';
 import { site } from '@/config/site';
@@ -13,8 +13,9 @@ import { path } from '@/lib/paths';
 const posts = await getPublishedPosts();
 const latestPosts = posts.slice(0, 6);
 const dailyDealPost = getActiveDailyDealPost(posts);
+const HOME_DAILY_DEAL_LIMIT = 10;
 
-const dailyDealEntries: ProductEntry[] = dailyDealPost
+const allDailyDealEntries: ProductEntry[] = dailyDealPost
   ? [
       ...(dailyDealPost.data.featuredProduct
         ? [dailyDealPost.data.featuredProduct]
@@ -26,6 +27,7 @@ const dailyDealEntries: ProductEntry[] = dailyDealPost
       imageUrl: entry.imageUrl,
     }))
   : [];
+const dailyDealEntries = allDailyDealEntries.slice(0, HOME_DAILY_DEAL_LIMIT);
 
 const dailyDealApiProducts =
   dailyDealEntries.length > 0
@@ -64,7 +66,9 @@ const dailyDealProducts = resolveProducts(dailyDealEntries, dailyDealApiProducts
         dailyDealPost && dailyDealProducts.length > 0 && (
           <HomeSection
             title="Daily Deals"
-            subtitle="本日の日替わりセール"
+            subtitle={`${formatDate(dailyDealPost.data.pubDate)}の日替わりセール`}
+            moreHref={path(`/posts/${dailyDealPost.id}/`)}
+            moreLabel="すべて見る"
             id="home-daily-deals"
           >
             <AmazonProductCards
