@@ -943,7 +943,7 @@ main {
 }
 
 .prose {
-  max-width: var(--max-width);
+  max-width: none;
 }
 
 .prose strong {
