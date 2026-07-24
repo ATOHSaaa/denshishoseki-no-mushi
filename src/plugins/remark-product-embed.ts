@@ -17,13 +17,38 @@ function getParagraphText(node: {
   return children[0].value ?? null;
 }
 
+function getFrontmatterRecord(file: {
+  data?: Record<string, unknown>;
+}): Record<string, unknown> {
+  const astro = file.data?.astro as
+    | { frontmatter?: Record<string, unknown> }
+    | undefined;
+  const direct = file.data?.frontmatter as Record<string, unknown> | undefined;
+  return astro?.frontmatter ?? direct ?? {};
+}
+
 function getFrontmatterProducts(file: {
   data?: Record<string, unknown>;
 }): ProductEntry[] {
-  const astro = file.data?.astro as
-    | { frontmatter?: { products?: ProductEntry[] } }
-    | undefined;
-  return astro?.frontmatter?.products ?? [];
+  const fm = getFrontmatterRecord(file);
+  const products = (fm.products as ProductEntry[] | undefined) ?? [];
+  const featured = fm.featuredProduct as ProductEntry | undefined;
+  const groups =
+    (fm.productGroups as { products?: ProductEntry[] }[] | undefined) ?? [];
+
+  const all: ProductEntry[] = [
+    ...(featured ? [featured] : []),
+    ...products,
+    ...groups.flatMap((group) => group.products ?? []),
+  ];
+
+  const seen = new Set<string>();
+  return all.filter((entry) => {
+    const key = entry.asin.toUpperCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 export const remarkProductEmbed: Plugin<[], Root> = () => {

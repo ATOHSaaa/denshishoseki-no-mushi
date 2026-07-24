@@ -74,11 +74,6 @@ export const upcomingTopics = [
     description: '最新モデルの画面・バッテリー・読み心地を実機で検証します。',
   },
   {
-    title: 'Kindleセールの見方・買い時ガイド',
-    category: 'deals' as CategoryId,
-    description: '日替わりセールやポイント還元を活用してお得に買うコツを解説します。',
-  },
-  {
     title: '電子書籍リーダー おすすめ比較',
     category: 'kindle' as CategoryId,
     description: 'Kindle・Kobo・楽天Koboなど主要端末を用途別に比較します。',

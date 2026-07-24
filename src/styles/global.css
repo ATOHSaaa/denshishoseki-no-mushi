@@ -389,6 +389,25 @@ main {
   color: var(--color-cat-manga);
 }
 
+.tag-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid currentColor;
+}
+
+.tag-badge--new-release {
+  background: rgba(74, 111, 165, 0.12);
+  color: var(--color-cat-app);
+}
+
+.tag-badge--sale {
+  background: var(--color-sale-bg);
+  color: var(--color-cat-deals);
+}
+
 /* ===== ホーム ===== */
 .home-layout {
   display: grid;

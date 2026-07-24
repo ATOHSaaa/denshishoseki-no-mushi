@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "generate:daily-deals": "node scripts/generate-daily-deals.mjs"
+    "generate:daily-deals": "node scripts/generate-daily-deals.mjs",
+    "generate:manga-new-releases": "node scripts/generate-manga-new-releases.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.1",

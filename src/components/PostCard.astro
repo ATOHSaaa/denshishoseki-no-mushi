@@ -11,8 +11,22 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { title, description, pubDate, category, thumbnailImage, thumbnailAsin, products } =
-  post.data;
+const {
+  title,
+  description,
+  pubDate,
+  category,
+  tags,
+  saleEvent,
+  thumbnailImage,
+  thumbnailAsin,
+  products,
+} = post.data;
+const postTagLabel = tags.includes('新刊')
+  ? '新刊'
+  : saleEvent || tags.includes('セール') || category === 'deals'
+    ? 'セール'
+    : null;
 const href = path(`/posts/${post.id}/`);
 const cat = categories[category as CategoryId];
 const asin = thumbnailAsin ?? products?.[0]?.asin;
@@ -34,9 +48,15 @@ const imageUrl =
   </div>
   <div class="post-card__body">
     <p class="post-card__meta">
-      <span class={`category-badge category-badge--${category}`}>
-        {cat.shortName}
-      </span>
+      {
+        postTagLabel && (
+          <span
+            class={`tag-badge tag-badge--${postTagLabel === '新刊' ? 'new-release' : 'sale'}`}
+          >
+            {postTagLabel}
+          </span>
+        )
+      }
       <PostDate date={pubDate} />
     </p>
     <h2 class="post-card__title">{title}</h2>
