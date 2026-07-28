@@ -171,10 +171,22 @@ async function getAccessToken(clientId, clientSecret) {
   return data.access_token;
 }
 
-async function fetchItems(asins, token, partnerTag) {
-  const items = [];
-  for (let i = 0; i < asins.length; i += 10) {
-    const chunk = asins.slice(i, i + 10);
+async function fetchItemsChunk(chunk, token, partnerTag) {
+  const body = JSON.stringify({
+    partnerTag,
+    partnerType: 'Associates',
+    marketplace: MARKETPLACE,
+    itemIds: chunk,
+    itemIdType: 'ASIN',
+    resources: [
+      'itemInfo.title',
+      'images.primary.large',
+      'images.primary.medium',
+      'offersV2.listings.price',
+    ],
+  });
+  const maxAttempts = 6;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const res = await fetch(`${API_BASE}/getItems`, {
       method: 'POST',
       headers: {
@@ -182,24 +194,29 @@ async function fetchItems(asins, token, partnerTag) {
         Authorization: `Bearer ${token}`,
         'x-marketplace': MARKETPLACE,
       },
-      body: JSON.stringify({
-        partnerTag,
-        partnerType: 'Associates',
-        marketplace: MARKETPLACE,
-        itemIds: chunk,
-        itemIdType: 'ASIN',
-        resources: [
-          'itemInfo.title',
-          'images.primary.large',
-          'images.primary.medium',
-          'offersV2.listings.price',
-        ],
-      }),
+      body,
     });
+    if (res.status === 429 && attempt < maxAttempts) {
+      const wait = 2000 * attempt;
+      console.warn(
+        `[daily-deals] getItems 429 (${chunk.length} ASINs), retry ${attempt}/${maxAttempts - 1} in ${wait}ms`,
+      );
+      await sleep(wait);
+      continue;
+    }
     if (!res.ok) throw new Error(`Creators API getItems error: ${res.status}`);
-    const data = await res.json();
+    return res.json();
+  }
+  throw new Error('Creators API getItems error: 429');
+}
+
+async function fetchItems(asins, token, partnerTag) {
+  const items = [];
+  for (let i = 0; i < asins.length; i += 10) {
+    const chunk = asins.slice(i, i + 10);
+    const data = await fetchItemsChunk(chunk, token, partnerTag);
     items.push(...(data.itemsResult?.items ?? []));
-    if (i + 10 < asins.length) await sleep(300);
+    if (i + 10 < asins.length) await sleep(800);
   }
 
   const byAsin = new Map(items.map((item) => [item.asin, item]));
