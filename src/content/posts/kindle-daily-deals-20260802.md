@@ -4,7 +4,7 @@ description: '2026年8月2日のKindle日替わりセール。『リボンの騎
 pubDate: 2026-08-02
 updatedDate: 2026-08-02
 category: deals
-tags: [Kindle, セール, 日替わりセール, リボンの騎士, 1]
+tags: [Kindle, セール, 日替わりセール, リボンの騎士, '1']
 saleEvent: kindle-daily-deal
 saleEndDate: 2026-08-02
 thumbnailImage: /images/posts/kindle-daily-deals-20260802-thumb.jpg

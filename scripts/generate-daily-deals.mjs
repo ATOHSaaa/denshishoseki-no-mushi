@@ -285,7 +285,7 @@ description: ${yamlQuote(description)}
 pubDate: ${date.ymd}
 updatedDate: ${date.ymd}
 category: deals
-tags: [${tags.join(', ')}]
+tags: [${tags.map(yamlQuote).join(', ')}]
 saleEvent: kindle-daily-deal
 saleEndDate: ${date.ymd}
 thumbnailImage: /images/posts/kindle-daily-deals-${date.compact}-thumb.jpg
