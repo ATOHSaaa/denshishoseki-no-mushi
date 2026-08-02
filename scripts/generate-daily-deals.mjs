@@ -1,5 +1,5 @@
 /**
- * Kindle日替わりセール記事を自動生成する
+ * Kindle日替わりセール（Daily Deals）データを更新する
  *
  * Usage:
  *   node scripts/generate-daily-deals.mjs
@@ -11,11 +11,9 @@
  *   AMAZON_CREATORS_API_PARTNER_TAG / PUBLIC_AMAZON_ASSOCIATE_TAG
  */
 
-import { createWriteStream, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { pipeline } from 'node:stream/promises';
-import { Readable } from 'node:stream';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -27,8 +25,7 @@ const DAILY_DEALS_URL =
   'https://www.amazon.co.jp/kindle-dbs/browse?metadata=storeType=ebooks&widgetId=ebooks-deals-storefront_KindleDailyDealsStrategy&title=Kindle%E6%97%A5%E6%9B%BF%E3%82%8F%E3%82%8A%E3%82%BB%E3%83%BC%E3%83%AB&sourceType=recs';
 const MIN_ITEMS = 10;
 const MAX_RETRIES = 3;
-const DEAL_PAGE_URL =
-  'https://www.amazon.co.jp/kindle-dbs/browse?metadata=storeType=ebooks&widgetId=ebooks-deals-storefront_KindleDailyDealsStrategy&title=Kindle%E6%97%A5%E6%9B%BF%E3%82%8F%E3%82%8A%E3%82%BB%E3%83%BC%E3%83%AB&sourceType=recs';
+const DATA_PATH = join(ROOT, 'src/data/daily-deals.json');
 
 function loadEnvFile() {
   const envPath = join(ROOT, '.env');
@@ -50,6 +47,10 @@ function tokyoParts(now = new Date()) {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
   }).formatToParts(now);
   const get = (type) => parts.find((p) => p.type === type)?.value ?? '';
   const year = get('year');
@@ -57,9 +58,7 @@ function tokyoParts(now = new Date()) {
   const day = get('day');
   return {
     ymd: `${year}-${month}-${day}`,
-    compact: `${year}${month}${day}`,
-    slash: `${year}/${Number(month)}/${Number(day)}`,
-    display: `${year}年${Number(month)}月${Number(day)}日`,
+    updatedAt: `${year}-${month}-${day}T${get('hour')}:${get('minute')}:${get('second')}+09:00`,
   };
 }
 
@@ -196,10 +195,10 @@ async function fetchItemsChunk(chunk, token, partnerTag) {
       },
       body,
     });
-    if (res.status === 429 && attempt < maxAttempts) {
+    if ((res.status === 429 || res.status === 504) && attempt < maxAttempts) {
       const wait = 2000 * attempt;
       console.warn(
-        `[daily-deals] getItems 429 (${chunk.length} ASINs), retry ${attempt}/${maxAttempts - 1} in ${wait}ms`,
+        `[daily-deals] getItems ${res.status} (${chunk.length} ASINs), retry ${attempt}/${maxAttempts - 1} in ${wait}ms`,
       );
       await sleep(wait);
       continue;
@@ -234,7 +233,10 @@ async function fetchItems(asins, token, partnerTag) {
       return {
         asin: item.asin,
         title,
-        priceDisplay: Number.isFinite(yen) && yen < Number.POSITIVE_INFINITY ? formatYen(yen) : priceDisplay,
+        priceDisplay:
+          Number.isFinite(yen) && yen < Number.POSITIVE_INFINITY
+            ? formatYen(yen)
+            : priceDisplay,
         yen,
         imageUrl,
       };
@@ -246,163 +248,32 @@ function pickFeatured(sorted) {
   return sorted.find((item) => item.yen <= 299) ?? sorted[0];
 }
 
-function yamlQuote(value) {
-  return `'${String(value).replace(/'/g, "''")}'`;
+function toProductEntry(item) {
+  return {
+    asin: item.asin,
+    label: labelFor(item.title),
+    price: item.priceDisplay,
+    savings: '日替わりセール',
+    imageUrl: item.imageUrl,
+  };
 }
 
-function buildMarkdown({ date, featured, products }) {
-  const count = products.length + 1;
-  const featureShort = shortTitle(featured.title);
-  const cheapest = [...products, featured].sort((a, b) => a.yen - b.yen)[0];
-  const priceBands = [...new Set([featured, ...products].map((p) => p.yen))]
-    .sort((a, b) => a - b)
-    .filter((n) => n <= 499)
-    .map(formatYen);
-
-  const title = `Kindle日替わりセール（${date.slash}）｜${featureShort} ${featured.priceDisplay}ほか${count}冊`;
-  const description = `${date.display}のKindle日替わりセール。『${featureShort}』が${featured.priceDisplay}。全${count}冊がセール中。`;
-
-  const tagSeeds = [
-    'Kindle',
-    'セール',
-    '日替わりセール',
-    ...featureShort.split(/\s+/).slice(0, 2),
-  ];
-  const tags = [...new Set(tagSeeds.filter(Boolean))].slice(0, 8);
-
-  const productLines = products
-    .map(
-      (p) => `  - asin: ${p.asin}
-    label: ${labelFor(p.title)}
-    price: ${p.priceDisplay}
-    savings: 日替わりセール`,
-    )
-    .join('\n');
-
-  return `---
-title: ${yamlQuote(title)}
-description: ${yamlQuote(description)}
-pubDate: ${date.ymd}
-updatedDate: ${date.ymd}
-category: deals
-tags: [${tags.map(yamlQuote).join(', ')}]
-saleEvent: kindle-daily-deal
-saleEndDate: ${date.ymd}
-thumbnailImage: /images/posts/kindle-daily-deals-${date.compact}-thumb.jpg
-featuredProduct:
-  asin: ${featured.asin}
-  label: ${labelFor(featured.title)}
-  price: ${featured.priceDisplay}
-  savings: 日替わりセール
-products:
-${productLines}
----
-
-${date.display}の[Kindle日替わりセール](${DEAL_PAGE_URL})では、マンガ・新書・実用書など**全${count}冊**がセール価格で購入できます。『${featureShort}』が${featured.priceDisplay}など、価格帯ごとに掘り出し物が並んでいます。
-
-日替わりセールは**当日中に終了**するキャンペーンです。気になる本は早めに確認してみてください。
-
-::after-affiliate::
-
-今回のラインナップは、**${priceBands.join('・')}**の価格帯。気になっていた1冊をさがしてみてください！
-
-## セール概要
-
-| 項目 | 内容 |
-|------|------|
-| キャンペーン名 | Kindle日替わりセール |
-| 対象日 | ${date.display} |
-| 掲載冊数 | ${count}冊（執筆時点） |
-| 最安価格帯 | ${cheapest.priceDisplay}（${shortTitle(cheapest.title)}） |
-| 目玉 | ${featureShort}（${featured.priceDisplay}） |
-| 確認先 | [Kindle日替わりセールページ](${DEAL_PAGE_URL}) |
-
-価格や掲載タイトルはいつでも変わる可能性があるため、購入前にAmazon.co.jpの表示をご確認ください。
-`;
+function buildDailyDealsData({ date, featured, products }) {
+  return {
+    date: date.ymd,
+    updatedAt: date.updatedAt,
+    featuredProduct: toProductEntry(featured),
+    products: products.map(toProductEntry),
+  };
 }
 
-async function downloadImage(url, dest) {
-  const res = await fetch(url, {
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    },
-  });
-  if (!res.ok || !res.body) throw new Error(`image download failed: ${res.status}`);
-  await pipeline(Readable.fromWeb(res.body), createWriteStream(dest));
-}
-
-async function createThumbnail(featured, second, outPath) {
-  mkdirSync(dirname(outPath), { recursive: true });
-  const tmpA = join(ROOT, `.tmp-cover-a-${featured.asin}.jpg`);
-  const tmpB = second ? join(ROOT, `.tmp-cover-b-${second.asin}.jpg`) : null;
-
+function readExistingDate() {
+  if (!existsSync(DATA_PATH)) return null;
   try {
-    await downloadImage(featured.imageUrl, tmpA);
-    if (second) await downloadImage(second.imageUrl, tmpB);
-
-    const sharp = (await import('sharp')).default;
-    const coverHeight = 480;
-    const gap = 28;
-    const padX = 48;
-    const padY = 40;
-    const bg = { r: 244, g: 241, b: 236 };
-
-    async function resized(path) {
-      const img = sharp(path);
-      const meta = await img.metadata();
-      const w = meta.width ?? 300;
-      const h = meta.height ?? 480;
-      const newW = Math.round((w * coverHeight) / h);
-      return img
-        .resize(newW, coverHeight, { fit: 'contain', background: bg })
-        .png()
-        .toBuffer({ resolveWithObject: true });
-    }
-
-    const a = await resized(tmpA);
-    if (!second || !tmpB) {
-      await sharp({
-        create: {
-          width: padX * 2 + a.info.width,
-          height: padY * 2 + coverHeight,
-          channels: 3,
-          background: bg,
-        },
-      })
-        .composite([{ input: a.data, left: padX, top: padY }])
-        .jpeg({ quality: 90 })
-        .toFile(outPath);
-      return;
-    }
-
-    const b = await resized(tmpB);
-    const width = padX * 2 + a.info.width + gap + b.info.width;
-    const height = padY * 2 + coverHeight;
-    await sharp({
-      create: {
-        width,
-        height,
-        channels: 3,
-        background: bg,
-      },
-    })
-      .composite([
-        { input: a.data, left: padX, top: padY },
-        { input: b.data, left: padX + a.info.width + gap, top: padY },
-      ])
-      .jpeg({ quality: 90 })
-      .toFile(outPath);
-  } finally {
-    for (const p of [tmpA, tmpB]) {
-      if (p && existsSync(p)) {
-        try {
-          await import('node:fs/promises').then((fs) => fs.unlink(p));
-        } catch {
-          // ignore
-        }
-      }
-    }
+    const data = JSON.parse(readFileSync(DATA_PATH, 'utf8'));
+    return data.date ?? null;
+  } catch {
+    return null;
   }
 }
 
@@ -411,15 +282,9 @@ async function main() {
   const force = process.argv.includes('--force');
   const date = tokyoParts();
 
-  const postPath = join(ROOT, 'src/content/posts', `kindle-daily-deals-${date.compact}.md`);
-  const thumbPath = join(
-    ROOT,
-    'public/images/posts',
-    `kindle-daily-deals-${date.compact}-thumb.jpg`,
-  );
-
-  if (existsSync(postPath) && !force) {
-    console.log(`[daily-deals] already exists: ${postPath} (skip)`);
+  const existingDate = readExistingDate();
+  if (existingDate === date.ymd && !force) {
+    console.log(`[daily-deals] already up to date: ${date.ymd} (skip)`);
     return;
   }
 
@@ -444,13 +309,10 @@ async function main() {
   const sorted = [...items].sort((a, b) => a.yen - b.yen || a.title.localeCompare(b.title, 'ja'));
   const featured = pickFeatured(sorted);
   const products = sorted.filter((item) => item.asin !== featured.asin);
+  const payload = buildDailyDealsData({ date, featured, products });
 
-  mkdirSync(dirname(postPath), { recursive: true });
-  writeFileSync(postPath, buildMarkdown({ date, featured, products }), 'utf8');
-  console.log(`[daily-deals] wrote ${postPath}`);
-
-  await createThumbnail(featured, products[0] ?? null, thumbPath);
-  console.log(`[daily-deals] wrote ${thumbPath}`);
+  writeFileSync(DATA_PATH, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+  console.log(`[daily-deals] wrote ${DATA_PATH}`);
   console.log(
     `[daily-deals] done: ${products.length + 1} books, featured=${featured.asin} ${featured.priceDisplay}`,
   );

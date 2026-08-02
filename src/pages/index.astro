@@ -4,30 +4,24 @@ import HomeSection from '@/components/home/HomeSection.astro';
 import PostCard from '@/components/PostCard.astro';
 import HomeSidebar from '@/components/home/HomeSidebar.astro';
 import AmazonProductCards from '@/components/AmazonProductCards.astro';
-import { getPublishedPosts, getActiveDailyDealPost, formatDate } from '@/lib/posts';
+import { getPublishedPosts, formatDate } from '@/lib/posts';
+import {
+  formatDailyDealsDate,
+  getActiveDailyDeals,
+  getDailyDealEntries,
+} from '@/lib/daily-deals';
 import { fetchProductsByAsins } from '@/lib/creators-api';
-import { resolveProducts, type ProductEntry } from '@/lib/product-entries';
+import { resolveProducts } from '@/lib/product-entries';
 import { site } from '@/config/site';
 import { path } from '@/lib/paths';
 
 const posts = await getPublishedPosts();
 const latestPosts = posts.slice(0, 6);
-const dailyDealPost = getActiveDailyDealPost(posts);
+const dailyDeals = getActiveDailyDeals();
 const HOME_DAILY_DEAL_LIMIT = 10;
-
-const allDailyDealEntries: ProductEntry[] = dailyDealPost
-  ? [
-      ...(dailyDealPost.data.featuredProduct
-        ? [dailyDealPost.data.featuredProduct]
-        : []),
-      ...(dailyDealPost.data.products ?? []),
-    ].map((entry) => ({
-      asin: entry.asin,
-      price: entry.price,
-      imageUrl: entry.imageUrl,
-    }))
+const dailyDealEntries = dailyDeals
+  ? getDailyDealEntries(dailyDeals).slice(0, HOME_DAILY_DEAL_LIMIT)
   : [];
-const dailyDealEntries = allDailyDealEntries.slice(0, HOME_DAILY_DEAL_LIMIT);
 
 const dailyDealApiProducts =
   dailyDealEntries.length > 0
@@ -63,11 +57,11 @@ const dailyDealProducts = resolveProducts(dailyDealEntries, dailyDealApiProducts
       }
 
       {
-        dailyDealPost && dailyDealProducts.length > 0 && (
+        dailyDeals && dailyDealProducts.length > 0 && (
           <HomeSection
             title="Daily Deals"
-            subtitle={`${formatDate(dailyDealPost.data.pubDate)}の日替わりセール`}
-            moreHref={path(`/posts/${dailyDealPost.id}/`)}
+            subtitle={`${formatDate(formatDailyDealsDate(dailyDeals.date))}の日替わりセール`}
+            moreHref={path('/daily-deals/')}
             moreLabel="すべて見る"
             id="home-daily-deals"
           >

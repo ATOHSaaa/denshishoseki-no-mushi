@@ -1,0 +1,356 @@
+{
+  "date": "2026-08-03",
+  "updatedAt": "2026-08-03T08:43:59+09:00",
+  "featuredProduct": {
+    "asin": "B00JPXE6EY",
+    "label": "三つ目がとおる　1 Kindle版",
+    "price": "99円",
+    "savings": "日替わりセール",
+    "imageUrl": "https://m.media-amazon.com/images/I/51VBFqdP+xL._SL500_.jpg"
+  },
+  "products": [
+    {
+      "asin": "B00JPXETJQ",
+      "label": "陽だまりの樹　1 Kindle版",
+      "price": "99円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51CG7uQQsYL._SL500_.jpg"
+    },
+    {
+      "asin": "B0H1LCTMRV",
+      "label": "43歳、子供部屋おばさんだって愛されたい 2巻 Kindle版",
+      "price": "199円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/516YcdOwbVL._SL500_.jpg"
+    },
+    {
+      "asin": "B07CBZQNH7",
+      "label": "図解　ヒトのココロがわかるフロイトの話 Kindle版",
+      "price": "199円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51ad-2EVBEL._SL500_.jpg"
+    },
+    {
+      "asin": "B07DVXXF8R",
+      "label": "図解　人体のヒミツ Kindle版",
+      "price": "199円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51p9YeIbTpL._SL500_.jpg"
+    },
+    {
+      "asin": "B0BD4FGVFR",
+      "label": "地面師　他人の土地を売り飛ばす闇の詐欺集団 Kindle版",
+      "price": "299円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/515HNrn6r8L._SL500_.jpg"
+    },
+    {
+      "asin": "B0GSZ2YNKC",
+      "label": "眠れなくなるほど面白い 図解 更年期の話 眠れなくなるほど面白い図解シリーズ Kindle版",
+      "price": "299円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51ltuDSnsiL._SL500_.jpg"
+    },
+    {
+      "asin": "B081N9XKT3",
+      "label": "しんがり　山一證券最後の１２人 Kindle版",
+      "price": "399円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41wUPExmrrL._SL500_.jpg"
+    },
+    {
+      "asin": "B0H2CXDNRW",
+      "label": "ニューモデル速報 第651弾 ホンダ・スーパーワンのすべて Kindle版",
+      "price": "399円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41U9USqRxXL._SL500_.jpg"
+    },
+    {
+      "asin": "B00IEC34CM",
+      "label": "はじめての構造主義 Kindle版",
+      "price": "399円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/311Hrny2yQL._SL500_.jpg"
+    },
+    {
+      "asin": "B0F1FHL5GD",
+      "label": "ファラオの密室 Kindle版",
+      "price": "399円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51Gz0zCGGBL._SL500_.jpg"
+    },
+    {
+      "asin": "B08H8KNZ84",
+      "label": "ぼくたちに、もうモノは必要ない。　増補版 Kindle版",
+      "price": "399円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41fLCK6efCL._SL500_.jpg"
+    },
+    {
+      "asin": "B079KV159J",
+      "label": "護られなかった者たちへ Kindle版",
+      "price": "399円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51TBCX-OcVL._SL500_.jpg"
+    },
+    {
+      "asin": "B01M8GUXYE",
+      "label": "日本人のための日本語文法入門 Kindle版",
+      "price": "399円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51qjhIwor5L._SL500_.jpg"
+    },
+    {
+      "asin": "B08L3JY5B2",
+      "label": "民主主義とは何か Kindle版",
+      "price": "399円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51fG5JmCYfL._SL500_.jpg"
+    },
+    {
+      "asin": "B0GX2TRV49",
+      "label": "「世界再編」は日本がリードする　自然・調和・十七条憲法で紡ぐ日本人論 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51xJ+aG10HL._SL500_.jpg"
+    },
+    {
+      "asin": "B0C6163744",
+      "label": "【特別版】わが子ちゃん3（特典付き） Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51lgOd3FopL._SL500_.jpg"
+    },
+    {
+      "asin": "B0CQ7PG46C",
+      "label": "【特別版】わが子ちゃん4（特典付き） Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/515ajO4dnWL._SL500_.jpg"
+    },
+    {
+      "asin": "B07CG48HYS",
+      "label": "1日1ページ、読むだけで身につく世界の教養365 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51zS46L6NJL._SL500_.jpg"
+    },
+    {
+      "asin": "B0GYN8YJ4P",
+      "label": "60歳、服を7割手放して「ときめく暮らし」がはじまった おしゃれの幅も、人生も豊かになる Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51EHJ4KoM0L._SL500_.jpg"
+    },
+    {
+      "asin": "B009I7KP9W",
+      "label": "ゲーム的リアリズムの誕生　動物化するポストモダン２ Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51uPrwX8OyL._SL500_.jpg"
+    },
+    {
+      "asin": "B0CX28K8K6",
+      "label": "このマンガがすごい！ comics おもしろがり屋でいきましょう Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51E9AIEaHDL._SL500_.jpg"
+    },
+    {
+      "asin": "B0GT1NFQFF",
+      "label": "されど罪人は竜と踊る 0.6　Please don’t give this feeling a name Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51ylrdlDxvL._SL500_.jpg"
+    },
+    {
+      "asin": "B0G6BZJKWZ",
+      "label": "そろそろ論語　物事の本質がわかる14章の旅 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51Edm6RzL+L._SL500_.jpg"
+    },
+    {
+      "asin": "B0GX31SRYZ",
+      "label": "たっきーママの簡単！からだリセット丼 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/518RIopEVtL._SL500_.jpg"
+    },
+    {
+      "asin": "B071YD8Q9D",
+      "label": "タロットの秘密 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51NLeLCnANL._SL500_.jpg"
+    },
+    {
+      "asin": "B0FW8KJ6QN",
+      "label": "とどけチャイコフスキー 岬洋介シリーズ Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51l2iPkeVKL._SL500_.jpg"
+    },
+    {
+      "asin": "B07415P917",
+      "label": "ハイデガー『存在と時間』入門 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41gbgyRVQmL._SL500_.jpg"
+    },
+    {
+      "asin": "B074SJDDX4",
+      "label": "ハプスブルク帝国 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51JQl-R+JuL._SL500_.jpg"
+    },
+    {
+      "asin": "B0GP9JRWTX",
+      "label": "ふだんの動きを「こう変える」だけでカラダが元気でキレイになる　生きるだけ筋トレ Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51drnvd6ilL._SL500_.jpg"
+    },
+    {
+      "asin": "B0DHX9SHQK",
+      "label": "プロの小説家が教える クリエイターのための語彙力図鑑 上級編 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51X3WfYkjBL._SL500_.jpg"
+    },
+    {
+      "asin": "B0H2CXS23Q",
+      "label": "わたしの脳のしつけ方: Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51D2YkXmksL._SL500_.jpg"
+    },
+    {
+      "asin": "B0G19NVB8W",
+      "label": "愛を選べ　１４歳からの『奇跡のコース』 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41K7KYXP6WL._SL500_.jpg"
+    },
+    {
+      "asin": "B0DKFCW94M",
+      "label": "官能小説「擬声語・擬態語」用例辞典 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41tLG4flHEL._SL500_.jpg"
+    },
+    {
+      "asin": "B08XJYRZTW",
+      "label": "自由になるための技術　リベラルアーツ Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51+gzJZmV8L._SL500_.jpg"
+    },
+    {
+      "asin": "B093LN7Q6B",
+      "label": "新 日本古代史 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/515lXBUdwQS._SL500_.jpg"
+    },
+    {
+      "asin": "B09KNNQF6W",
+      "label": "新版　コンサルティングの基本　この１冊ですべてわかる Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41DzZS+mIXL._SL500_.jpg"
+    },
+    {
+      "asin": "B0H1LDK7GS",
+      "label": "親子で一緒にゼロからわかる！ 海外大学進学大全 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51ECS7zyT7L._SL500_.jpg"
+    },
+    {
+      "asin": "B075127VMJ",
+      "label": "睡眠の科学・改訂新版　なぜ眠るのか　なぜ目覚めるのか Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/411cikcl5WL._SL500_.jpg"
+    },
+    {
+      "asin": "B0FMCHZGDT",
+      "label": "正しいデータ分析でビジネスを加速する 因果推論入門 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51YXnlFK+pL._SL500_.jpg"
+    },
+    {
+      "asin": "B0DTJMRJSJ",
+      "label": "戦略コンサルのトップ５％だけに見えている世界 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51X6tz62LRL._SL500_.jpg"
+    },
+    {
+      "asin": "B0DVF6FVCY",
+      "label": "孫子の兵法　世界が学んだ「競争戦略」の原理原則 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51kPDv3T8iL._SL500_.jpg"
+    },
+    {
+      "asin": "B0BTNZT6HX",
+      "label": "第10回　神社検定　問題と解説 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41owVBcG30L._SL500_.jpg"
+    },
+    {
+      "asin": "B0DJ2DWKD7",
+      "label": "誰でもわかる決算書分析の勘所　経済記者が教える Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41N3sYNc73L._SL500_.jpg"
+    },
+    {
+      "asin": "B0GX2ZZZXR",
+      "label": "男の子育児の「なんで？」を楽しむ本 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51jlL1qPadL._SL500_.jpg"
+    },
+    {
+      "asin": "B0BZP3T7L5",
+      "label": "朝イチの「ひとり時間」が人生を変える Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41mOxkF6puL._SL500_.jpg"
+    },
+    {
+      "asin": "B0GX2WLSGB",
+      "label": "超越する知性　「正義」に騙されないための読書 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51jA-jhbhzL._SL500_.jpg"
+    },
+    {
+      "asin": "B0G1XXRSJ7",
+      "label": "任せる勇気: チームの熱を生み出す「マインドセット」 Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41O3q9xUrpL._SL500_.jpg"
+    },
+    {
+      "asin": "B016BLIG84",
+      "label": "保育者が知っておきたい　発達が気になる子の感覚統合 Ｇａｋｋｅｎ保育Ｂｏｏｋｓ Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/51I9cYjGzQL._SL500_.jpg"
+    },
+    {
+      "asin": "B0GHYPMCLW",
+      "label": "予約の取れないセラピストの 骨格腹やせ１分メソッド Kindle版",
+      "price": "499円",
+      "savings": "日替わりセール",
+      "imageUrl": "https://m.media-amazon.com/images/I/41l4uhT8RGL._SL500_.jpg"
+    }
+  ]
+}

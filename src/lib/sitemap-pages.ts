@@ -4,6 +4,7 @@ import { categories, type CategoryId } from '@/config/site';
 export const staticSitemapPages = [
   { href: '/', label: 'トップ' },
   { href: '/posts/', label: '記事一覧' },
+  { href: '/daily-deals/', label: 'Kindle日替わりセール' },
   { href: '/about/', label: 'About' },
   { href: '/privacy/', label: 'プライバシーポリシー' },
   { href: '/contact/', label: 'お問い合わせ' },

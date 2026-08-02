@@ -1,0 +1,65 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AmazonProductCards from '@/components/AmazonProductCards.astro';
+import { fetchProductsByAsins } from '@/lib/creators-api';
+import {
+  formatDailyDealsDate,
+  getActiveDailyDeals,
+  getDailyDealEntries,
+  KINDLE_DAILY_DEALS_URL,
+} from '@/lib/daily-deals';
+import { formatDate } from '@/lib/posts';
+import { resolveProducts } from '@/lib/product-entries';
+import { site } from '@/config/site';
+import { path } from '@/lib/paths';
+
+const dailyDeals = getActiveDailyDeals();
+const entries = dailyDeals ? getDailyDealEntries(dailyDeals) : [];
+const apiProducts =
+  entries.length > 0 ? await fetchProductsByAsins(entries.map((e) => e.asin)) : [];
+const products = resolveProducts(entries, apiProducts);
+const displayDate = dailyDeals
+  ? formatDate(formatDailyDealsDate(dailyDeals.date))
+  : '';
+---
+
+<BaseLayout
+  title={`Kindle日替わりセール | ${site.name}`}
+  description="本日のKindle日替わりセール対象作品一覧。マンガ・小説・新書・実用書などが毎日セール価格で購入できます。"
+  pathname="/daily-deals/"
+>
+  <h1 class="page-title">Kindle日替わりセール</h1>
+  {
+    dailyDeals && products.length > 0 ? (
+      <>
+        <p class="page-desc">
+          {displayDate}のKindle日替わりセール対象作品です。価格や掲載タイトルは変更されることがあるため、購入前に
+          <a href={KINDLE_DAILY_DEALS_URL} target="_blank" rel="noopener noreferrer">
+            Amazon.co.jp
+          </a>
+          の表示をご確認ください。
+        </p>
+        <AmazonProductCards products={products} entries={entries} />
+        <p class="post-list-footer">
+          <a class="text-link-arrow" href={KINDLE_DAILY_DEALS_URL} target="_blank" rel="noopener noreferrer">
+            Amazonの日替わりセールページを見る →
+          </a>
+        </p>
+      </>
+    ) : (
+      <>
+        <p class="page-desc">
+          本日分の一覧はまだ準備中です。しばらくしてから再度お越しください。
+        </p>
+        <p class="post-list-footer">
+          <a class="text-link-arrow" href={KINDLE_DAILY_DEALS_URL} target="_blank" rel="noopener noreferrer">
+            Amazonの日替わりセールページを見る →
+          </a>
+        </p>
+      </>
+    )
+  }
+  <p class="post-list-footer">
+    <a class="text-link-arrow" href={path('/')}>トップへ戻る →</a>
+  </p>
+</BaseLayout>
