@@ -6,11 +6,30 @@ import { renderAmazonCtaHtml } from '../lib/amazon-cta-html.ts';
 const MARKER_RE = /^::amazon-cta(?:\{([^}]+)\})?::$/;
 
 function getParagraphText(node: {
-  children?: { type: string; value?: string }[];
+  children?: {
+    type: string;
+    value?: string;
+    url?: string;
+    children?: { value?: string }[];
+  }[];
 }): string | null {
   const children = node.children ?? [];
-  if (children.length !== 1 || children[0]?.type !== 'text') return null;
-  return children[0].value ?? null;
+  if (children.length === 0) return null;
+
+  const parts: string[] = [];
+  for (const child of children) {
+    if (child.type === 'text') {
+      parts.push(child.value ?? '');
+      continue;
+    }
+    if (child.type === 'link') {
+      parts.push(child.url ?? child.children?.[0]?.value ?? '');
+      continue;
+    }
+    return null;
+  }
+
+  return parts.join('');
 }
 
 export const remarkAmazonCta: Plugin<[], Root> = () => {

@@ -8,23 +8,76 @@ interface Props {
 }
 
 const { title, pathname } = Astro.props;
-const url = encodeURIComponent(canonicalUrl(pathname));
-const text = encodeURIComponent(`${title} | ${site.name}`);
+const pageUrl = canonicalUrl(pathname);
+const encodedUrl = encodeURIComponent(pageUrl);
+const encodedTitle = encodeURIComponent(`${title} | ${site.name}`);
 ---
 
 <nav class="share-buttons" aria-label="記事をシェア">
   <a
-    href={`https://twitter.com/intent/tweet?url=${url}&text=${text}`}
+    href={`https://b.hatena.ne.jp/add?mode=confirm&url=${encodedUrl}&title=${encodedTitle}`}
     target="_blank"
     rel="noopener noreferrer"
+    class="share-buttons__item share-buttons__item--hatena"
   >
-    Xでシェア
+    はてブ
   </a>
   <a
-    href={`https://social-plugins.line.me/lineit/share?url=${url}`}
+    href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
     target="_blank"
     rel="noopener noreferrer"
+    class="share-buttons__item share-buttons__item--twitter"
   >
-    LINE
+    Twitter
   </a>
+  <a
+    href={`https://social-plugins.line.me/lineit/share?url=${encodedUrl}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="share-buttons__item share-buttons__item--line"
+  >
+    LINEで送る
+  </a>
+  <button
+    type="button"
+    class="share-buttons__item share-buttons__item--copy"
+    data-url={pageUrl}
+    data-label="リンクをコピー"
+    data-copied="コピーしました"
+  >
+    リンクをコピー
+  </button>
 </nav>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.share-buttons__item--copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const url = btn.dataset.url;
+      const label = btn.dataset.label ?? 'リンクをコピー';
+      const copied = btn.dataset.copied ?? 'コピーしました';
+      if (!url) return;
+
+      const showCopied = () => {
+        btn.textContent = copied;
+        setTimeout(() => {
+          btn.textContent = label;
+        }, 2000);
+      };
+
+      try {
+        await navigator.clipboard.writeText(url);
+        showCopied();
+      } catch {
+        const textarea = document.createElement('textarea');
+        textarea.value = url;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showCopied();
+      }
+    });
+  });
+</script>

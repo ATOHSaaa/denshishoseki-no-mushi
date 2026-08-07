@@ -1038,7 +1038,7 @@ main {
   border-bottom: 2px dashed var(--color-border);
 }
 
-.share-buttons a {
+.share-buttons__item {
   font-size: 0.8125rem;
   font-weight: 700;
   text-decoration: none;
@@ -1046,6 +1046,21 @@ main {
   border-radius: var(--radius-full);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.share-buttons a.share-buttons__item:hover {
+  opacity: 0.75;
+}
+
+.share-buttons button.share-buttons__item {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.share-buttons button.share-buttons__item:hover {
+  opacity: 0.75;
 }
 
 .related-posts {

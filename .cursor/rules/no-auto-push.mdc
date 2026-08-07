@@ -1,0 +1,10 @@
+---
+description: 本番への push / deploy はユーザー明示指示時のみ
+alwaysApply: true
+---
+
+# 本番反映（push / deploy）
+
+- 記事生成・修正・コミットはローカルにとどめる。
+- `git push`、GitHub Actions による Deploy、本番 URL への反映は、ユーザーが「push」「デプロイ」「本番反映」などと**明確に指示したときだけ**行う。
+- 日替わり更新や記事作成の依頼だけでは push しない。完了後はローカルの変更内容を伝え、push が必要なら待つ。
