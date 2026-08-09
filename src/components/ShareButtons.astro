@@ -19,33 +19,56 @@ const encodedTitle = encodeURIComponent(`${title} | ${site.name}`);
     target="_blank"
     rel="noopener noreferrer"
     class="share-buttons__item share-buttons__item--hatena"
+    aria-label="はてなブックマークに追加"
   >
-    はてブ
+    <span class="share-buttons__label" aria-hidden="true">B!</span>
+    <span class="sr-only">はてなブックマークに追加</span>
   </a>
   <a
     href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
     target="_blank"
     rel="noopener noreferrer"
     class="share-buttons__item share-buttons__item--twitter"
+    aria-label="Xでシェア"
   >
-    Twitter
-  </a>
-  <a
-    href={`https://social-plugins.line.me/lineit/share?url=${encodedUrl}`}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="share-buttons__item share-buttons__item--line"
-  >
-    LINEで送る
+    <span class="share-buttons__label share-buttons__label--x" aria-hidden="true">X</span>
+    <span class="sr-only">Xでシェア</span>
   </a>
   <button
     type="button"
     class="share-buttons__item share-buttons__item--copy"
     data-url={pageUrl}
-    data-label="リンクをコピー"
-    data-copied="コピーしました"
+    aria-label="リンクをコピー"
   >
-    リンクをコピー
+    <svg class="share-buttons__icon share-buttons__icon--link" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+      ></path>
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+      ></path>
+    </svg>
+    <svg class="share-buttons__icon share-buttons__icon--check" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M20 6 9 17l-5-5"
+      ></path>
+    </svg>
+    <span class="sr-only">リンクをコピー</span>
   </button>
 </nav>
 
@@ -53,14 +76,14 @@ const encodedTitle = encodeURIComponent(`${title} | ${site.name}`);
   document.querySelectorAll<HTMLButtonElement>('.share-buttons__item--copy').forEach((btn) => {
     btn.addEventListener('click', async () => {
       const url = btn.dataset.url;
-      const label = btn.dataset.label ?? 'リンクをコピー';
-      const copied = btn.dataset.copied ?? 'コピーしました';
       if (!url) return;
 
       const showCopied = () => {
-        btn.textContent = copied;
+        btn.classList.add('is-copied');
+        btn.setAttribute('aria-label', 'コピーしました');
         setTimeout(() => {
-          btn.textContent = label;
+          btn.classList.remove('is-copied');
+          btn.setAttribute('aria-label', 'リンクをコピー');
         }, 2000);
       };
 

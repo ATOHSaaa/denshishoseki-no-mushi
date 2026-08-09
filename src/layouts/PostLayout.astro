@@ -110,6 +110,8 @@ const cat = categories[category as CategoryId];
           <meta itemprop="description" content={description} />
         </header>
 
+        <ShareButtons title={title} pathname={pathname} />
+
         {
           introHtml && (
             <div class="article-intro prose" set:html={introHtml} />
@@ -155,8 +157,6 @@ const cat = categories[category as CategoryId];
             <div class="article-body prose" set:html={bodyHtml} />
           )
         }
-
-        <ShareButtons title={title} pathname={pathname} />
       </article>
     </div>
 

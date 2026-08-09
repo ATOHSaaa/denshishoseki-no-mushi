@@ -884,7 +884,7 @@ main {
 
 .article-header {
   margin-top: var(--space-lg);
-  margin-bottom: var(--space-lg);
+  margin-bottom: 0;
   padding: var(--space-lg) 0 var(--space-md);
   border-bottom: 1px solid var(--color-border);
 }
@@ -1031,27 +1031,62 @@ main {
 .share-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: var(--space-md) 0;
-  padding: var(--space-sm) 0;
-  border-top: 2px dashed var(--color-border);
-  border-bottom: 2px dashed var(--color-border);
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) 0 0;
 }
 
 .share-buttons__item {
-  font-size: 0.8125rem;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 6px;
+  background: #fff;
+  border: 1.5px solid var(--color-ink);
+  color: var(--color-ink);
+  line-height: 1;
   text-decoration: none;
-  padding: 0.4rem 0.85rem;
-  border-radius: var(--radius-full);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  line-height: 1.4;
+  transition: opacity 0.15s ease;
+}
+
+.share-buttons__label {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.share-buttons__label--x {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.share-buttons__icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  display: block;
+}
+
+.share-buttons__icon--check {
+  display: none;
+}
+
+.share-buttons__item--copy.is-copied .share-buttons__icon--link {
+  display: none;
+}
+
+.share-buttons__item--copy.is-copied .share-buttons__icon--check {
+  display: block;
 }
 
 .share-buttons a.share-buttons__item:hover {
-  opacity: 0.75;
+  opacity: 0.7;
+  transform: none;
 }
 
 .share-buttons button.share-buttons__item {
@@ -1060,7 +1095,8 @@ main {
 }
 
 .share-buttons button.share-buttons__item:hover {
-  opacity: 0.75;
+  opacity: 0.7;
+  transform: none;
 }
 
 .related-posts {
