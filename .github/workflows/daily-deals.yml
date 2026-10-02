@@ -1,9 +1,6 @@
 name: Generate daily Kindle deals
 
 on:
-  schedule:
-    # 00:05 Asia/Tokyo (= 15:05 UTC)
-    - cron: '5 15 * * *'
   workflow_dispatch:
 
 permissions:
