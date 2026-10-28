@@ -1,9 +1,10 @@
 name: Generate daily Kindle deals
 
 on:
-  schedule:
-    # 00:05 Asia/Tokyo (= 15:05 UTC)
-    - cron: '5 15 * * *'
+  # 連続失敗のため毎日の自動実行を停止（手動は workflow_dispatch のみ）
+  # schedule:
+  #   # 00:05 Asia/Tokyo (= 15:05 UTC)
+  #   - cron: '5 15 * * *'
   workflow_dispatch:
 
 permissions:
